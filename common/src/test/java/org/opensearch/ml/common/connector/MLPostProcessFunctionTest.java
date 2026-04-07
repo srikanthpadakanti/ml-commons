@@ -5,6 +5,7 @@
 
 package org.opensearch.ml.common.connector;
 
+import static org.opensearch.ml.common.connector.MLPostProcessFunction.BEDROCK_AI21_JURASSIC;
 import static org.opensearch.ml.common.connector.MLPostProcessFunction.BEDROCK_EMBEDDING;
 import static org.opensearch.ml.common.connector.MLPostProcessFunction.COHERE_EMBEDDING;
 import static org.opensearch.ml.common.connector.MLPostProcessFunction.DEFAULT_EMBEDDING;
@@ -53,5 +54,25 @@ public class MLPostProcessFunctionTest {
     public void test_buildModelTensorList_exception() {
         exceptionRule.expect(IllegalArgumentException.class);
         MLPostProcessFunction.get(DEFAULT_EMBEDDING).apply(null, null);
+    }
+
+    @Test
+    public void test_jurassic_contains() {
+        Assert.assertTrue(MLPostProcessFunction.contains(BEDROCK_AI21_JURASSIC));
+    }
+
+    @Test
+    public void test_jurassic_get() {
+        Assert.assertNotNull(MLPostProcessFunction.get(BEDROCK_AI21_JURASSIC));
+    }
+
+    @Test
+    public void test_jurassic_getResponseFilter() {
+        Assert.assertEquals("$.completions[0].data.text", MLPostProcessFunction.getResponseFilter(BEDROCK_AI21_JURASSIC));
+    }
+
+    @Test
+    public void test_jurassic_buildModelTensorList() {
+        Assert.assertNotNull(MLPostProcessFunction.get(BEDROCK_AI21_JURASSIC).apply("test completion", null));
     }
 }

@@ -782,7 +782,9 @@ public class ModelInterfaceUtils {
                     log.debug("Detected Amazon Bedrock model");
                     switch ((connector.getParameters().get("model") != null) ? connector.getParameters().get("model") : "null") {
                         case "ai21.j2-mid-v1":
-                            if (connectorAction.getPostProcessFunction() != null && !connectorAction.getPostProcessFunction().isBlank()) {
+                            if (connectorAction.getPostProcessFunction() != null
+                                && connectorAction.getPostProcessFunction()
+                                    .equalsIgnoreCase(MLPostProcessFunction.BEDROCK_AI21_JURASSIC)) {
                                 log
                                     .debug(
                                         "Creating preset model interface for Amazon Bedrock model with post-process function: {}",

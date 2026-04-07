@@ -53,6 +53,8 @@ public class ModelInterfaceUtilsTest {
 
     public ConnectorAction connectorActionWithoutPostProcessFunction;
 
+    public ConnectorAction connectorActionWithJurassicPostProcessFunction;
+
     @Rule
     public ExpectedException exceptionRule = ExpectedException.none();
 
@@ -86,6 +88,15 @@ public class ModelInterfaceUtilsTest {
             .url("http:///mock")
             .requestBody("{\"input\": \"${parameters.input}\"}")
             .build();
+
+        connectorActionWithJurassicPostProcessFunction = ConnectorAction
+            .builder()
+            .actionType(PREDICT)
+            .method("POST")
+            .url("http:///mock")
+            .requestBody("{\"input\": \"${parameters.input}\"}")
+            .postProcessFunction(MLPostProcessFunction.BEDROCK_AI21_JURASSIC)
+            .build();
     }
 
     @Test
@@ -97,7 +108,7 @@ public class ModelInterfaceUtilsTest {
             .builder()
             .protocol("http")
             .parameters(parameters)
-            .actions(List.of(connectorActionWithPostProcessFunction))
+            .actions(List.of(connectorActionWithJurassicPostProcessFunction))
             .build();
         updateRegisterModelInputModelInterfaceFieldsByConnector(registerModelInputWithStandaloneConnector, connector);
         assertEquals(registerModelInputWithStandaloneConnector.getModelInterface(), BEDROCK_AI21_LABS_JURASSIC2_MID_V1_MODEL_INTERFACE);
@@ -113,6 +124,21 @@ public class ModelInterfaceUtilsTest {
             .protocol("http")
             .parameters(parameters)
             .actions(List.of(connectorActionWithoutPostProcessFunction))
+            .build();
+        updateRegisterModelInputModelInterfaceFieldsByConnector(registerModelInputWithStandaloneConnector, connector);
+        assertEquals(registerModelInputWithStandaloneConnector.getModelInterface(), BEDROCK_AI21_LABS_JURASSIC2_MID_V1_RAW_MODEL_INTERFACE);
+    }
+
+    @Test
+    public void testUpdateRegisterModelInputModelInterfaceFieldsByConnectorBEDROCK_AI21_LABS_JURASSIC2_MID_V1_CUSTOM_POSTPROCESS_GETS_RAW() {
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("service_name", "bedrock");
+        parameters.put("model", "ai21.j2-mid-v1");
+        connector = HttpConnector
+            .builder()
+            .protocol("http")
+            .parameters(parameters)
+            .actions(List.of(connectorActionWithPostProcessFunction))
             .build();
         updateRegisterModelInputModelInterfaceFieldsByConnector(registerModelInputWithStandaloneConnector, connector);
         assertEquals(registerModelInputWithStandaloneConnector.getModelInterface(), BEDROCK_AI21_LABS_JURASSIC2_MID_V1_RAW_MODEL_INTERFACE);
@@ -415,7 +441,7 @@ public class ModelInterfaceUtilsTest {
             .builder()
             .protocol("http")
             .parameters(parameters)
-            .actions(List.of(connectorActionWithPostProcessFunction))
+            .actions(List.of(connectorActionWithJurassicPostProcessFunction))
             .build();
         registerModelInputWithInnerConnector.setConnector(connector);
         updateRegisterModelInputModelInterfaceFieldsByConnector(registerModelInputWithInnerConnector);

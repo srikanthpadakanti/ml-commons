@@ -45,7 +45,7 @@ POST /_plugins/_ml/connectors/_create
             },
             "url": "https://bedrock-runtime.${parameters.region}.amazonaws.com/model/${parameters.model}/invoke",
            "request_body": "{\"prompt\":\"${parameters.inputs}\",\"maxTokens\":200,\"temperature\":0.7,\"topP\":1,\"stopSequences\":[],\"countPenalty\":{\"scale\":0},\"presencePenalty\":{\"scale\":0},\"frequencyPenalty\":{\"scale\":0}}",
-           "post_process_function": "\n  return params['completions'][0].data.text; \n"
+           "post_process_function": "connector.post_process.bedrock.ai21_jurassic"
         }
     ]
 }
@@ -78,7 +78,7 @@ POST /_plugins/_ml/connectors/_create
             },
             "url": "https://bedrock-runtime.${parameters.region}.amazonaws.com/model/${parameters.model}/invoke",
            "request_body": "{\"prompt\":\"${parameters.inputs}\",\"maxTokens\":200,\"temperature\":0.7,\"topP\":1,\"stopSequences\":[],\"countPenalty\":{\"scale\":0},\"presencePenalty\":{\"scale\":0},\"frequencyPenalty\":{\"scale\":0}}",
-           "post_process_function": "\n  return params['completions'][0].data.text; \n"
+           "post_process_function": "connector.post_process.bedrock.ai21_jurassic"
         }
     ]
 }
